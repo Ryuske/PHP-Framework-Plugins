@@ -1,0 +1,4 @@
+Created by Kenyon Haliwell (http://khdev.net). For use in: https://github.com/Ryuske/PHP-Framework
+
+This plugin allows content management, features advanced security with regards to who can manage what content.
+It is based on keynotes, you manage content for "keynotes" rather than pages. Not meant to be used as a blogging plateform.

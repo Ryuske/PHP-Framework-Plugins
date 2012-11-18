@@ -1,0 +1,3 @@
+Created by Kenyon Haliwell (http://khdev.net). For use in: https://github.com/Ryuske/PHP-Framework
+
+This plugin is designed to remove Full Path Disclosures (FPD) from Errors thrown by the framework.
