@@ -1,5 +1,5 @@
 <?php
-class Cms_Prefbits extends Cms_Variables {
+class cms_prefbits extends cms_variables {
 	private static $prefbits = array(
 		'admins' => array(
 			'super admin' => '4',
@@ -18,14 +18,14 @@ class Cms_Prefbits extends Cms_Variables {
 			'access' => '1'
 		)
 	);
-	
+
 	public function count($type) {
 		if (isset($_SESSION['cms_prefbits'])) {
 			$static = 3;
 			$groups = Db::query('SELECT `group_name` FROM `groups`');
 			$domains = Db::query('SELECT `domain_name` FROM `domains`');
 			$keynotes = Db::query('SELECT `keynote_name` FROM `keynotes`');
-		
+
 			switch ($type) {
 				case 'static':
 					$return = $static;
@@ -41,13 +41,13 @@ class Cms_Prefbits extends Cms_Variables {
 				default:
 					$return = 'Prefbits Error - Unknown Type \'' . $type . '\'';
 			}
-		
+
 		return $return;
 		} else {
 			return 'Prefbits Error - Failure Loading';
 		}
 	}
-	
+
 	public function check($type, $permission, $index=0, $user=null, $is_exactly=false) {
 		if (isset($_SESSION['cms_prefbits'])) {
 			if ($user === null) {
@@ -59,7 +59,7 @@ class Cms_Prefbits extends Cms_Variables {
 			$account_prefbits = Db::query('SELECT `account_prefbits` FROM `accounts` WHERE `account_username`=:username', array('username'=>$user));
 			$account_prefbits = explode('|', $account_prefbits[0]['account_prefbits']);
 			$return = false;
-			
+
 			switch ($type) {
 				case 'admin':
 					for ($i=0; $i<count(self::$prefbits['admins']); $i++) {
@@ -75,7 +75,7 @@ class Cms_Prefbits extends Cms_Variables {
 					for ($i=0; $i<count(self::$prefbits['groups']); $i++) {
 						if ($account_prefbits[1 + $index] & self::$prefbits['groups'][$permission] || ($account_prefbits[1 + $index] & (self::$prefbits['groups'][$permission] << $i)  && $is_exactly === false)) {
 							$return = true;
-						}	
+						}
 					}
 					break;
 				case 'domain':
@@ -113,11 +113,11 @@ class Cms_Prefbits extends Cms_Variables {
 				default:
 					$return = 'Unknown Type';
 			}
-			
+
 			return $return;
 		}
 	}
-	
+
 	public function check_groups($type, $permission, $group, $index=0, $is_exactly=false) {
 		if (isset($_SESSION['cms_prefbits'])) {
 			$domains = Db::query('SELECT `domain_name` FROM `domains`');
@@ -125,30 +125,30 @@ class Cms_Prefbits extends Cms_Variables {
 			$group_prefbits = Db::query('SELECT `group_prefbits` FROM `groups` WHERE `group_id`=:id', array('id'=>$group));
 			$group_prefbits = explode('|', $group_prefbits[0]['group_prefbits']);
 			$return = false;
-			
+
 			switch ($type) {
 				case 'domain':
 					for ($i=0; $i<count(self::$prefbits['domains']); $i++) {
 						if ($group_prefbits[$index] & self::$prefbits['domains'][$permission] || ($group_prefbits[$index] & (self::$prefbits['domains'][$permission] << $i) && $is_exactly === false)) {
 							$return = true;
-						}	
+						}
 					}
 					break;
 				case 'keynote':
 					for ($i=0; $i<count(self::$prefbits['keynotes']); $i++) {
 						if ($group_prefbits[count($domains) + $index] & self::$prefbits['keynotes'][$permission] || ($group_prefbits[count($domains) + $index] & (self::$prefbits['keynotes'][$permission] << $i) && $is_exactly === false)) {
 							$return = true;
-						}	
+						}
 					}
 					break;
 				default:
 					$return - 'Unknown Type';
 			}
-			
+
 			return $return;
 		}
 	}
-	
+
 	public function add($type, $prefbit=0) {
 		if (isset($_SESSION['cms_prefbits'])) {
 			$groups = Db::query('SELECT `group_name` FROM `groups`');
@@ -214,7 +214,7 @@ class Cms_Prefbits extends Cms_Variables {
 			return false;
 		}
 	}
-	
+
 	public function update($type, $prefbit, $index=0, $user=null) {
 		if (isset($_SESSION['cms_prefbits'])) {
 			if ($user === null) {
@@ -225,7 +225,7 @@ class Cms_Prefbits extends Cms_Variables {
 			$keynotes = Db::query('SELECT `keynote_name` FROM `keynotes`');
 			$account_prefbits = explode('|', parent::$account_info[0]['account_prefbits']);
 			$new_prefbits = array();
-			
+
 			switch ($type) {
 				case 'admin':
 					$account_prefbits[0] = $prefbit;
@@ -265,7 +265,7 @@ class Cms_Prefbits extends Cms_Variables {
 			return false;
 		}
 	}
-	
+
 	public function remove($type, $index) {
 		if (isset($_SESSION['cms_prefbits'])) {
 			$groups = Db::query('SELECT `group_name` FROM `groups`');
@@ -273,7 +273,7 @@ class Cms_Prefbits extends Cms_Variables {
 			$keynotes = Db::query('SELECT `keynote_name` FROM `keynotes`');
 			$account_prefbits = explode('|', parent::$account_info[0]['account_prefbits']);
 			$new_prefbits = array();
-			
+
 			switch ($type) {
 				case 'group':
 					$account_prefbits[1 + $index] = '';
